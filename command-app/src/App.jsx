@@ -30,61 +30,79 @@ export default function App() {
   };
 
   return (
-    <div className="noise h-full bg-bg flex items-center justify-center">
-      {/* Desktop: device frame / Mobile: full screen */}
-      <div className="relative w-full h-full md:w-[430px] md:h-[932px] md:max-h-[calc(100vh-40px)] md:rounded-[44px] md:border-[3px] md:border-[#2A2A2A] md:shadow-[0_0_0_1px_#1A1A1A,0_25px_80px_rgba(0,0,0,0.6),0_0_120px_rgba(0,102,255,0.04)] md:overflow-hidden flex flex-col bg-bg">
-
-        {/* Status bar - desktop frame only */}
-        <div className="hidden md:flex items-center justify-between px-8 pt-3 pb-1">
-          <span className="text-[12px] font-semibold text-text-secondary">
-            {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-          </span>
-          <div className="w-[100px] h-[28px] bg-black rounded-full" />
-          <div className="flex items-center gap-1">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-text-secondary"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
-            <svg width="16" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-text-secondary"><rect x="1" y="6" width="18" height="12" rx="2"/><rect x="20" y="9" width="3" height="6" rx="1"/><rect x="3" y="8" width="10" height="8" rx="1" className="text-success"/></svg>
-          </div>
-        </div>
-
-        <main className="flex-1 overflow-y-auto pb-24 md:pb-20">
-          {renderTab()}
-        </main>
-
-        {/* Bottom nav */}
-        <nav className="absolute bottom-0 left-0 right-0 z-50 safe-bottom">
-          <div className="mx-3 mb-3 md:mx-4 md:mb-5">
-            <div className="flex justify-around items-center h-16 bg-surface/80 backdrop-blur-2xl rounded-2xl border border-border shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.03)_inset]">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                const active = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className="relative flex flex-col items-center gap-1 px-4 py-2 transition-all duration-300"
-                  >
-                    {active && (
-                      <div className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-accent rounded-full shadow-[0_0_8px_rgba(0,102,255,0.6)]" />
-                    )}
-                    <Icon size={20} active={active} />
-                    <span className={`text-[10px] font-semibold tracking-wide transition-colors duration-300 ${
-                      active ? 'text-accent' : 'text-text-tertiary'
-                    }`}>
-                      {tab.label}
-                    </span>
-                  </button>
-                );
-              })}
+    <div className="noise h-full bg-bg flex">
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex flex-col w-[220px] h-full border-r border-border flex-shrink-0">
+        <div className="px-5 pt-7 pb-6">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center">
+              <span className="text-accent text-sm font-bold">C</span>
+            </div>
+            <div>
+              <p className="text-[14px] font-bold text-text-primary leading-none">Command</p>
+              <p className="text-[11px] text-text-tertiary mt-0.5">Studio Ops</p>
             </div>
           </div>
+        </div>
+        <nav className="flex-1 px-3">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl mb-0.5 transition-all duration-200 ${
+                  active
+                    ? 'bg-accent/10 text-accent'
+                    : 'text-text-tertiary hover:text-text-secondary hover:bg-surface-2'
+                }`}
+              >
+                <Icon size={18} active={active} />
+                <span className="text-[13px] font-semibold">{tab.label}</span>
+                {active && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_6px_rgba(0,102,255,0.5)]" />}
+              </button>
+            );
+          })}
         </nav>
-      </div>
+        <div className="px-5 pb-5">
+          <p className="text-[11px] text-text-tertiary/40">v1.0</p>
+        </div>
+      </aside>
 
-      {/* Desktop branding */}
-      <div className="hidden md:block fixed bottom-6 left-8">
-        <p className="text-text-tertiary text-[13px] font-semibold tracking-tight">Command</p>
-        <p className="text-text-tertiary/40 text-[11px]">Creative Studio Ops</p>
-      </div>
+      {/* Main content */}
+      <main className="flex-1 overflow-y-auto pb-24 md:pb-8">
+        {renderTab()}
+      </main>
+
+      {/* Mobile bottom nav */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 safe-bottom">
+        <div className="mx-3 mb-3">
+          <div className="flex justify-around items-center h-16 bg-surface/80 backdrop-blur-2xl rounded-2xl border border-border shadow-[0_8px_32px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.03)_inset]">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className="relative flex flex-col items-center gap-1 px-4 py-2 transition-all duration-300"
+                >
+                  {active && (
+                    <div className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-accent rounded-full shadow-[0_0_8px_rgba(0,102,255,0.6)]" />
+                  )}
+                  <Icon size={20} active={active} />
+                  <span className={`text-[10px] font-semibold tracking-wide transition-colors duration-300 ${
+                    active ? 'text-accent' : 'text-text-tertiary'
+                  }`}>
+                    {tab.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </nav>
     </div>
   );
 }
