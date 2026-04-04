@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0C0C0C;
+  --color-surface: #161616;
+  --color-surface-2: #1E1E1E;
+  --color-border: #2A2A2A;
+  --color-accent: #0057FF;
+  --color-accent-dim: rgba(0, 87, 255, 0.15);
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #888888;
+  --color-danger: #FF3B30;
+  --color-success: #30D158;
+  --color-warning: #FFD60A;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #root {
+  height: 100%;
+  background: #0C0C0C;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
