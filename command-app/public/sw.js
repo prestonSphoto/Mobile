@@ -1,8 +1,8 @@
 const CACHE_NAME = 'command-v1';
 const PRECACHE_URLS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
+  '/Mobile/',
+  '/Mobile/index.html',
+  '/Mobile/manifest.json',
 ];
 
 self.addEventListener('install', (event) => {
