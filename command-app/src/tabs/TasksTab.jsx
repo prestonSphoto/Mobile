@@ -34,10 +34,10 @@ export default function TasksTab({ data, setData }) {
   const prDot = { high: 'bg-red-500', medium: 'bg-amber-500', low: 'bg-blue-500' };
 
   return (
-    <div className="p-6 md:p-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-6 md:p-10">
+      <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-6">
-          <h1 className="text-[26px] font-semibold tracking-tight">Tasks</h1>
+          <h1 className="text-[28px] font-semibold tracking-tight">Tasks</h1>
           <div className="flex bg-surface border border-border rounded-lg p-0.5">
             {[['today', `Today (${todayTasks.length})`], ['backlog', `Backlog (${backlog.length})`]].map(([id, label]) => (
               <button key={id} onClick={() => setSubTab(id)}

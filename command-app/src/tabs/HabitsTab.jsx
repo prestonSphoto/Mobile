@@ -19,10 +19,10 @@ export default function HabitsTab({ data, setData }) {
   const getStreak = (h) => { let s = 0; const d = new Date(); for (let i = 0; i < 365; i++) { const ds = d.toISOString().split('T')[0]; if (h.completions[ds] > 0) s++; else if (i > 0) break; d.setDate(d.getDate() - 1); } return s; };
 
   return (
-    <div className="p-6 md:p-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-6 md:p-10">
+      <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-6">
-          <h1 className="text-[26px] font-semibold tracking-tight">Habits</h1>
+          <h1 className="text-[28px] font-semibold tracking-tight">Habits</h1>
           <div className="flex bg-surface border border-border rounded-lg p-0.5">
             {['business', 'personal'].map(tab => (
               <button key={tab} onClick={() => setSubTab(tab)}
@@ -66,7 +66,7 @@ export default function HabitsTab({ data, setData }) {
       )}
 
       {/* Habits grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {habits.map(h => {
           const todayCount = h.completions[today] || 0;
           const target = h.targetPeriod === 'day' ? h.targetCount : Math.ceil(h.targetCount / 7);
@@ -75,7 +75,7 @@ export default function HabitsTab({ data, setData }) {
           const pct = Math.min(todayCount / Math.max(target, 1), 1);
 
           return (
-            <div key={h.id} className="card p-5 group">
+            <div key={h.id} className="card p-6 group">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="text-[15px] font-semibold">{h.name}</h3>

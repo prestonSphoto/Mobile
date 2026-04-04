@@ -40,9 +40,9 @@ export default function MoneyTab({ data, setData }) {
   const maxM = Math.max(...Object.values(allMonths), data.monthlyGoal);
 
   return (
-    <div className="p-6 md:p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-[26px] font-semibold tracking-tight">Finances</h1>
+    <div className="p-6 md:p-10">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-[28px] font-semibold tracking-tight">Finances</h1>
         <div className="flex gap-2">
           <button onClick={() => { setShowLogPayment(!showLogPayment); setShowAddInvoice(false); }}
             className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors shadow-sm shadow-accent/20 flex items-center gap-1.5">
@@ -58,7 +58,7 @@ export default function MoneyTab({ data, setData }) {
       </div>
 
       {/* Revenue card */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
         <div className="card p-6 lg:col-span-2">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm text-text-secondary font-medium">{currentMonth} Revenue</p>
@@ -125,7 +125,7 @@ export default function MoneyTab({ data, setData }) {
       )}
 
       {/* Invoices */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
         {overdueInvoices.length > 0 && (
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-3"><div className="w-2 h-2 rounded-full bg-danger animate-pulse" /><h3 className="text-[15px] font-semibold text-danger">Overdue ({overdueInvoices.length})</h3></div>
@@ -152,7 +152,7 @@ export default function MoneyTab({ data, setData }) {
 
       {/* Recent payments */}
       {(data.payments || []).length > 0 && (
-        <div className="mb-8">
+        <div className="mb-10">
           <h3 className="text-xs text-text-tertiary font-semibold uppercase tracking-wider mb-3">Recent Payments</h3>
           <div className="card overflow-hidden"><table className="w-full"><thead><tr className="bg-surface-2/50 border-b border-border"><th className="text-left py-2.5 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Client</th><th className="text-left py-2.5 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Date</th><th className="text-right py-2.5 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Amount</th></tr></thead><tbody>
             {[...(data.payments || [])].reverse().slice(0, 10).map(p => (

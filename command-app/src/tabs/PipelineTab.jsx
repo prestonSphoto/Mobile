@@ -27,9 +27,9 @@ export default function PipelineTab({ data, setData }) {
   };
 
   return (
-    <div className="p-6 md:p-8 h-full flex flex-col">
-      <div className="flex items-center justify-between mb-2 flex-shrink-0">
-        <h1 className="text-[26px] font-semibold tracking-tight">Pipeline</h1>
+    <div className="p-6 md:p-10 h-full flex flex-col">
+      <div className="flex items-center justify-between mb-3 flex-shrink-0">
+        <h1 className="text-[28px] font-semibold tracking-tight">Pipeline</h1>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-6 text-sm">
             <span className="text-text-secondary">Active: <span className="font-semibold text-text-primary">${totalPipeline.toLocaleString()}</span></span>
@@ -41,7 +41,7 @@ export default function PipelineTab({ data, setData }) {
           </button>
         </div>
       </div>
-      <p className="text-sm text-text-tertiary mb-5 flex-shrink-0">{active.filter(c => c.column !== 'closed').length} active deals across {data.pipeline.columns.length} stages</p>
+      <p className="text-sm text-text-tertiary mb-6 flex-shrink-0">{active.filter(c => c.column !== 'closed').length} active deals across {data.pipeline.columns.length} stages</p>
 
       {showAdd && (
         <div className="card p-5 mb-5 flex-shrink-0">
@@ -58,7 +58,7 @@ export default function PipelineTab({ data, setData }) {
       )}
 
       {/* Kanban */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4 min-h-0 overflow-x-auto">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-5 min-h-0 overflow-x-auto">
         {data.pipeline.columns.map(col => {
           const cc = active.filter(c => c.column === col);
           const colVal = cc.reduce((s, c) => s + c.value, 0);

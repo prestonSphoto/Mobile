@@ -29,11 +29,11 @@ export default function HomeTab({ data, setData }) {
   const atRisk = data.pipeline.cards.filter(c => !c.lost && c.health !== 'green');
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-6 md:p-10">
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex items-start justify-between mb-10">
         <div>
-          <h1 className="text-[26px] font-semibold tracking-tight text-text-primary mb-1">Dashboard</h1>
+          <h1 className="text-[28px] font-semibold tracking-tight text-text-primary mb-1.5">Dashboard</h1>
           <p className="text-sm text-text-secondary">{dateStr}</p>
         </div>
         <div className="flex items-center gap-2">
@@ -64,7 +64,7 @@ export default function HomeTab({ data, setData }) {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-5 mb-10">
         <StatCard label="Tasks Due" value={tasksDueToday} sub={`${totalActive} active total`} icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>} iconBg="bg-blue-50 text-blue-500" />
         <StatCard label="Habits" value={`${habitsToday}/${totalHabits}`} sub={habitsToday === totalHabits ? 'All complete' : `${totalHabits - habitsToday} remaining`} icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>} iconBg="bg-emerald-50 text-emerald-500" />
         <StatCard label="Outstanding" value={`$${outstanding.toLocaleString()}`} sub={`${invoiceCount} invoices`} icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>} iconBg="bg-red-50 text-red-500" />
@@ -72,9 +72,9 @@ export default function HomeTab({ data, setData }) {
         <StatCard label="Revenue" value={`$${monthlyRev.toLocaleString()}`} sub={`of $${data.monthlyGoal.toLocaleString()} goal`} icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>} iconBg="bg-violet-50 text-violet-500" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
         {/* Upcoming */}
-        <div className="card p-5">
+        <div className="card p-6">
           <h3 className="text-[15px] font-semibold mb-4">Upcoming Tasks</h3>
           {upcomingTasks.length === 0 ? <p className="text-sm text-text-tertiary py-4">No active tasks</p> : (
             <div className="space-y-3">
@@ -91,7 +91,7 @@ export default function HomeTab({ data, setData }) {
         </div>
 
         {/* Attention */}
-        <div className="card p-5">
+        <div className="card p-6">
           <h3 className="text-[15px] font-semibold mb-4">Needs Attention</h3>
           {atRisk.length === 0 ? <p className="text-sm text-text-tertiary py-4">All deals healthy</p> : (
             <div className="space-y-3">
@@ -110,7 +110,7 @@ export default function HomeTab({ data, setData }) {
         </div>
 
         {/* Wins */}
-        <div className="card p-5">
+        <div className="card p-6">
           <h3 className="text-[15px] font-semibold mb-4">Weekly Wins</h3>
           <div className="space-y-3">
             <div>
@@ -130,7 +130,7 @@ export default function HomeTab({ data, setData }) {
       </div>
 
       {pastWeeks.length > 0 && (
-        <div className="card p-5">
+        <div className="card p-6">
           <h3 className="text-[15px] font-semibold mb-4">Past Wins</h3>
           <div className="divide-y divide-border">
             {pastWeeks.slice(0, 6).map(w => (
@@ -151,13 +151,13 @@ export default function HomeTab({ data, setData }) {
 
 function StatCard({ label, value, sub, icon, iconBg }) {
   return (
-    <div className="card p-5">
-      <div className="flex items-start justify-between mb-3">
+    <div className="card p-6">
+      <div className="flex items-start justify-between mb-4">
         <p className="text-[13px] text-text-secondary font-medium">{label}</p>
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconBg}`}>{icon}</div>
       </div>
-      <p className="text-[22px] font-semibold tracking-tight text-text-primary">{value}</p>
-      <p className="text-[12px] text-text-tertiary mt-1">{sub}</p>
+      <p className="text-[24px] font-semibold tracking-tight text-text-primary">{value}</p>
+      <p className="text-[12px] text-text-tertiary mt-1.5">{sub}</p>
     </div>
   );
 }
