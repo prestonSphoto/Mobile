@@ -56,16 +56,18 @@ export default function HabitsTab({ data, setData }) {
   };
 
   return (
-    <div className="p-4 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold tracking-tight mb-4">Habits</h1>
+    <div className="px-5 pt-14 pb-8 max-w-lg mx-auto">
+      <h1 className="text-[28px] font-bold tracking-tight mb-6">Habits</h1>
 
-      <div className="flex gap-1 mb-4 bg-surface rounded p-0.5">
+      <div className="flex gap-1 mb-6 bg-surface rounded-xl p-1 border border-border-subtle">
         {['business', 'personal'].map(tab => (
           <button
             key={tab}
             onClick={() => setSubTab(tab)}
-            className={`flex-1 py-1.5 text-sm font-medium rounded capitalize transition ${
-              subTab === tab ? 'bg-surface-2 text-white' : 'text-text-secondary'
+            className={`flex-1 py-2 text-[13px] font-semibold rounded-lg capitalize transition-all duration-200 ${
+              subTab === tab
+                ? 'bg-surface-3 text-text-primary shadow-sm'
+                : 'text-text-tertiary hover:text-text-secondary'
             }`}
           >
             {tab}
@@ -73,52 +75,77 @@ export default function HabitsTab({ data, setData }) {
         ))}
       </div>
 
-      <div className="space-y-3 mb-4">
+      <div className="space-y-3 mb-5">
         {habits.map(habit => {
           const todayCount = habit.completions[today] || 0;
           const streak = getStreak(habit);
           const isExpanded = expanded === habit.id;
+          const target = habit.targetPeriod === 'day' ? habit.targetCount : Math.ceil(habit.targetCount / 7);
+          const progress = Math.min(todayCount / Math.max(target, 1), 1);
+
           return (
-            <div key={habit.id} className="bg-surface border border-border rounded overflow-hidden">
-              <div className="p-3">
-                <div className="flex items-center justify-between mb-2">
+            <div key={habit.id} className="card card-glow overflow-hidden">
+              <div className="p-4">
+                <div className="flex items-start justify-between mb-3">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">{habit.name}</span>
-                      <span className="text-xs text-text-secondary">{habit.targetCount}/{habit.targetPeriod}</span>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[14px] font-semibold">{habit.name}</span>
+                      <span className="text-[11px] text-text-tertiary font-medium px-1.5 py-0.5 bg-surface-2 rounded-md">
+                        {habit.targetCount}/{habit.targetPeriod}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-3 mt-1">
-                      <span className="text-xs text-text-secondary">Today: <span className="text-white">{todayCount}</span></span>
-                      <span className="text-xs text-text-secondary">Streak: <span className="text-accent">{streak}d</span></span>
+                    <div className="flex items-center gap-4">
+                      <span className="text-[12px] text-text-tertiary">
+                        Today <span className="text-text-secondary font-semibold">{todayCount}</span>
+                      </span>
+                      {streak > 0 && (
+                        <span className="text-[12px] text-text-tertiary">
+                          Streak <span className="text-accent font-semibold">{streak}d</span>
+                        </span>
+                      )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => logCompletion(habit.id)}
-                      className="px-3 py-1.5 bg-accent text-white text-xs font-medium rounded hover:bg-accent/80 transition"
-                    >
-                      +1
-                    </button>
-                    <button
-                      onClick={() => setExpanded(isExpanded ? null : habit.id)}
-                      className="text-text-secondary hover:text-white p-1"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                        style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
-                      >
-                        <polyline points="9 18 15 12 9 6" />
-                      </svg>
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => logCompletion(habit.id)}
+                    className="px-4 py-2 bg-accent text-white text-[12px] font-bold rounded-xl hover:bg-accent/85 transition-all shadow-[0_2px_8px_rgba(0,102,255,0.25)] active:scale-95"
+                  >
+                    +1
+                  </button>
                 </div>
-                <MiniHeatmap habit={habit} compact />
+
+                {/* Progress bar */}
+                <div className="w-full h-1 bg-surface-3 rounded-full mb-3 overflow-hidden">
+                  <div
+                    className="h-full bg-accent rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${progress * 100}%` }}
+                  />
+                </div>
+
+                {/* Mini heatmap */}
+                <div className="flex items-center justify-between">
+                  <MiniHeatmap habit={habit} />
+                  <button
+                    onClick={() => setExpanded(isExpanded ? null : habit.id)}
+                    className="text-text-tertiary hover:text-text-secondary p-1.5 rounded-lg hover:bg-surface-2 transition-all"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                      style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+                    >
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </button>
+                </div>
               </div>
+
               {isExpanded && (
-                <div className="p-3 pt-0 border-t border-border mt-0">
+                <div className="px-4 pb-4 pt-1 border-t border-border">
                   <div className="pt-3">
+                    <p className="text-[11px] text-text-tertiary font-semibold uppercase tracking-[0.06em] mb-2">52 Week View</p>
                     <Heatmap habit={habit} />
-                    <div className="flex justify-end mt-2">
-                      <button onClick={() => deleteHabit(habit.id)} className="text-xs text-danger hover:text-danger/80">Delete</button>
+                    <div className="flex justify-end mt-3">
+                      <button onClick={() => deleteHabit(habit.id)} className="text-[12px] text-danger/60 hover:text-danger font-medium px-2 py-1 rounded-lg hover:bg-danger-soft transition-all">
+                        Delete Habit
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -129,14 +156,14 @@ export default function HabitsTab({ data, setData }) {
       </div>
 
       {showAdd ? (
-        <div className="p-3 bg-surface border border-border rounded space-y-3">
+        <div className="card card-glow p-4 space-y-3">
           <input
             autoFocus
             value={newHabit.name}
             onChange={(e) => setNewHabit(n => ({ ...n, name: e.target.value }))}
             onKeyDown={(e) => e.key === 'Enter' && addHabit()}
             placeholder="Habit name..."
-            className="w-full bg-transparent text-sm text-white placeholder-text-secondary/50 focus:outline-none"
+            className="w-full bg-transparent text-[14px] text-text-primary placeholder-text-tertiary focus:outline-none font-medium"
           />
           <div className="flex gap-2">
             <input
@@ -144,26 +171,26 @@ export default function HabitsTab({ data, setData }) {
               min="1"
               value={newHabit.targetCount}
               onChange={(e) => setNewHabit(n => ({ ...n, targetCount: e.target.value }))}
-              className="w-20 bg-surface-2 border border-border rounded px-2 py-1 text-xs text-white"
+              className="w-24 bg-surface-2 border border-border rounded-lg px-3 py-2 text-[12px] text-text-primary"
             />
             <select
               value={newHabit.targetPeriod}
               onChange={(e) => setNewHabit(n => ({ ...n, targetPeriod: e.target.value }))}
-              className="bg-surface-2 border border-border rounded px-2 py-1 text-xs text-white"
+              className="flex-1 bg-surface-2 border border-border rounded-lg px-3 py-2 text-[12px] text-text-primary"
             >
               <option value="day">per day</option>
               <option value="week">per week</option>
             </select>
           </div>
-          <div className="flex gap-2">
-            <button onClick={() => setShowAdd(false)} className="flex-1 py-1.5 text-sm text-text-secondary">Cancel</button>
-            <button onClick={addHabit} className="flex-1 py-1.5 bg-accent text-white text-sm font-medium rounded">Add</button>
+          <div className="flex gap-2 pt-1">
+            <button onClick={() => setShowAdd(false)} className="flex-1 py-2 text-[13px] text-text-tertiary font-medium rounded-lg hover:bg-surface-2 transition">Cancel</button>
+            <button onClick={addHabit} className="flex-1 py-2 bg-accent text-white text-[13px] font-semibold rounded-lg shadow-[0_2px_8px_rgba(0,102,255,0.3)]">Add Habit</button>
           </div>
         </div>
       ) : (
         <button
           onClick={() => setShowAdd(true)}
-          className="w-full py-2.5 border border-dashed border-border rounded text-sm text-text-secondary hover:border-accent hover:text-accent transition"
+          className="w-full py-3 border border-dashed border-border rounded-2xl text-[13px] text-text-tertiary font-medium hover:border-accent/50 hover:text-accent hover:bg-accent/5 transition-all duration-200"
         >
           + Add Habit
         </button>
@@ -176,7 +203,7 @@ function MiniHeatmap({ habit }) {
   const today = new Date();
   const todayStr_ = today.toISOString().split('T')[0];
   const cells = [];
-  for (let i = 13; i >= 0; i--) {
+  for (let i = 20; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
     const ds = d.toISOString().split('T')[0];
@@ -186,12 +213,16 @@ function MiniHeatmap({ habit }) {
   }
 
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-[3px]">
       {cells.map(c => (
         <div
           key={c.date}
-          className={`w-3 h-3 rounded-[1px] ${c.isToday ? 'ring-1 ring-accent' : ''}`}
-          style={{ backgroundColor: c.count > 0 ? `rgba(0, 87, 255, ${Math.min(0.3 + c.count * 0.2, 1)})` : '#1E1E1E' }}
+          className={`w-[10px] h-[10px] rounded-[3px] transition-colors ${c.isToday ? 'ring-1 ring-accent ring-offset-1 ring-offset-bg' : ''}`}
+          style={{
+            backgroundColor: c.count > 0
+              ? `rgba(0, 102, 255, ${Math.min(0.25 + c.count * 0.2, 1)})`
+              : 'var(--color-surface-3)'
+          }}
           title={`${c.date}: ${c.count}`}
         />
       ))}
@@ -204,7 +235,6 @@ function Heatmap({ habit }) {
   const todayStr_ = today.toISOString().split('T')[0];
   const weeks = [];
 
-  // Build 52 weeks x 7 days grid
   const startDate = new Date(today);
   startDate.setDate(startDate.getDate() - (52 * 7) + (7 - startDate.getDay()));
 
@@ -222,25 +252,25 @@ function Heatmap({ habit }) {
     weeks.push(week);
   }
 
-  const dayLabels = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+  const dayLabels = ['', 'M', '', 'W', '', 'F', ''];
 
   return (
-    <div className="flex gap-0.5 overflow-x-auto">
-      <div className="flex flex-col gap-0.5 mr-1">
+    <div className="flex gap-[2px] overflow-x-auto pb-1">
+      <div className="flex flex-col gap-[2px] mr-1 flex-shrink-0">
         {dayLabels.map((l, i) => (
-          <div key={i} className="text-[8px] text-text-secondary h-[10px] leading-[10px]">{l}</div>
+          <div key={i} className="text-[7px] text-text-tertiary h-[9px] leading-[9px] w-3">{l}</div>
         ))}
       </div>
       {weeks.map((week, wi) => (
-        <div key={wi} className="flex flex-col gap-0.5">
+        <div key={wi} className="flex flex-col gap-[2px]">
           {week.map(cell => (
             <div
               key={cell.date}
-              className={`w-[10px] h-[10px] rounded-[1px] ${cell.isToday ? 'ring-1 ring-accent' : ''} ${cell.isFuture ? 'opacity-20' : ''}`}
+              className={`w-[9px] h-[9px] rounded-[2px] ${cell.isToday ? 'ring-1 ring-accent' : ''} ${cell.isFuture ? 'opacity-15' : ''}`}
               style={{
                 backgroundColor: cell.count > 0
-                  ? `rgba(0, 87, 255, ${Math.min(0.25 + cell.count * 0.2, 1)})`
-                  : '#1E1E1E'
+                  ? `rgba(0, 102, 255, ${Math.min(0.2 + cell.count * 0.2, 1)})`
+                  : 'var(--color-surface-3)'
               }}
               title={`${cell.date}: ${cell.count}`}
             />

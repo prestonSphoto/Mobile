@@ -1,17 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0C0C0C;
-  --color-surface: #161616;
-  --color-surface-2: #1E1E1E;
-  --color-border: #2A2A2A;
-  --color-accent: #0057FF;
-  --color-accent-dim: rgba(0, 87, 255, 0.15);
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #888888;
-  --color-danger: #FF3B30;
+  --color-bg: #08080A;
+  --color-surface: #111113;
+  --color-surface-2: #1A1A1F;
+  --color-surface-3: #222228;
+  --color-border: #25252D;
+  --color-border-subtle: #1C1C22;
+  --color-accent: #0066FF;
+  --color-accent-soft: rgba(0, 102, 255, 0.12);
+  --color-accent-glow: rgba(0, 102, 255, 0.06);
+  --color-text-primary: #F0F0F0;
+  --color-text-secondary: #6E6E80;
+  --color-text-tertiary: #45455A;
+  --color-danger: #FF453A;
+  --color-danger-soft: rgba(255, 69, 58, 0.12);
   --color-success: #30D158;
+  --color-success-soft: rgba(48, 209, 88, 0.12);
   --color-warning: #FFD60A;
+  --color-warning-soft: rgba(255, 214, 10, 0.12);
 }
 
 * {
@@ -23,28 +30,92 @@
 
 html, body, #root {
   height: 100%;
-  background: #0C0C0C;
-  color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
 }
 
 input, textarea, select, button {
   font-family: inherit;
+  letter-spacing: inherit;
 }
 
+/* Premium scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 2px;
+  background: var(--color-border);
+  border-radius: 10px;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
+  filter: invert(1) brightness(0.6);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent-soft);
+  color: white;
+}
+
+/* Safe area for iPhone notch */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Smooth transitions everywhere */
+* {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Focus states */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Premium card base */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  border-color: #2E2E3A;
+}
+
+.card-glow {
+  box-shadow: 0 0 0 1px var(--color-border), 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Subtle noise texture overlay */
+.noise::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.015;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
