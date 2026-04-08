@@ -64,7 +64,7 @@ export default function HomeTab({ data, setData }) {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-5 mb-10">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mb-10">
         <StatCard label="Tasks Due" value={tasksDueToday} sub={`${totalActive} active total`} icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>} iconBg="bg-blue-50 text-blue-500" />
         <StatCard label="Habits" value={`${habitsToday}/${totalHabits}`} sub={habitsToday === totalHabits ? 'All complete' : `${totalHabits - habitsToday} remaining`} icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>} iconBg="bg-emerald-50 text-emerald-500" />
         <StatCard label="Outstanding" value={`$${outstanding.toLocaleString()}`} sub={`${invoiceCount} invoices`} icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>} iconBg="bg-red-50 text-red-500" />
