@@ -31,21 +31,21 @@ export default function App() {
 
   return (
     <div className="h-full bg-bg flex">
-      {/* Sidebar */}
-      <aside className="hidden md:flex flex-col w-[250px] h-full bg-sidebar border-r border-border flex-shrink-0">
-        <div className="px-6 pt-7 pb-6">
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex flex-col w-[240px] h-full bg-sidebar border-r border-border flex-shrink-0">
+        <div className="px-5 pt-6 pb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center shadow-sm">
-              <span className="text-white text-lg font-bold">C</span>
+            <div className="w-9 h-9 rounded-lg bg-accent flex items-center justify-center">
+              <span className="text-white text-sm font-bold">C</span>
             </div>
             <div>
-              <p className="text-[15px] font-semibold text-text-primary leading-tight">Command</p>
-              <p className="text-[12px] text-text-tertiary">Studio Dashboard</p>
+              <p className="text-sm font-semibold text-text-primary leading-tight">Command</p>
+              <p className="text-[11px] text-text-tertiary">Studio Dashboard</p>
             </div>
           </div>
         </div>
 
-        <p className="px-6 text-[11px] font-semibold text-text-tertiary uppercase tracking-wider mb-2">General</p>
+        <p className="px-5 text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1.5">General</p>
         <nav className="flex-1 px-3">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -54,28 +54,30 @@ export default function App() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-left transition-all mb-0.5 ${
+                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left transition-all mb-0.5 text-[13px] font-medium ${
                   active
-                    ? 'bg-accent text-white shadow-sm shadow-accent/25'
+                    ? 'bg-accent text-white'
                     : 'text-text-secondary hover:text-text-primary hover:bg-surface-2'
                 }`}
               >
-                <Icon size={18} active={active} />
-                <span className="text-[13px] font-medium">{tab.label}</span>
+                <Icon size={16} active={active} />
+                {tab.label}
               </button>
             );
           })}
         </nav>
 
-        <div className="p-4 m-3 mb-4 bg-accent-soft rounded-xl">
-          <p className="text-[13px] font-semibold text-text-primary mb-1">Command v1.0</p>
-          <p className="text-[11px] text-text-secondary mb-0">Creative Studio Ops</p>
+        <div className="px-4 pb-4">
+          <div className="p-3 bg-surface-2 rounded-lg">
+            <p className="text-[12px] font-semibold text-text-primary">Command v1.0</p>
+            <p className="text-[11px] text-text-tertiary">Creative Studio Ops</p>
+          </div>
         </div>
       </aside>
 
-      {/* Main */}
+      {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
-        <main className="flex-1 overflow-y-auto overflow-x-hidden pb-20 md:pb-0">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden pb-20 md:pb-6">
           {renderTab()}
         </main>
       </div>

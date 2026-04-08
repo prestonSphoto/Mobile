@@ -40,12 +40,13 @@ export default function MoneyTab({ data, setData }) {
   const maxM = Math.max(...Object.values(allMonths), data.monthlyGoal);
 
   return (
-    <div className="p-6 md:p-10">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-[28px] font-semibold tracking-tight">Finances</h1>
+    <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-text-primary">Finances</h1>
         <div className="flex gap-2">
           <button onClick={() => { setShowLogPayment(!showLogPayment); setShowAddInvoice(false); }}
-            className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors shadow-sm shadow-accent/20 flex items-center gap-1.5">
+            className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors flex items-center gap-1.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Log Payment
           </button>
@@ -57,20 +58,26 @@ export default function MoneyTab({ data, setData }) {
         </div>
       </div>
 
-      {/* Revenue card */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
-        <div className="card p-6 lg:col-span-2">
+      {/* Revenue + Quick Stats */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <div className="card p-5 lg:col-span-2">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm text-text-secondary font-medium">{currentMonth} Revenue</p>
             {editingGoal ? (
-              <div className="flex items-center gap-1"><span className="text-xs text-text-tertiary">Goal: $</span>
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-text-tertiary">Goal: $</span>
                 <input autoFocus value={goalInput} onChange={(e) => setGoalInput(e.target.value)} onBlur={saveGoal} onKeyDown={(e) => e.key === 'Enter' && saveGoal()}
-                  className="w-20 bg-surface-2 border border-border rounded-md px-2 py-1 text-xs" /></div>
-            ) : <button onClick={() => setEditingGoal(true)} className="text-xs text-text-tertiary hover:text-text-secondary transition-colors">Goal: ${data.monthlyGoal.toLocaleString()}</button>}
+                  className="w-20 bg-surface-2 border border-border rounded px-2 py-1 text-xs" />
+              </div>
+            ) : (
+              <button onClick={() => setEditingGoal(true)} className="text-xs text-text-tertiary hover:text-text-secondary transition-colors">
+                Goal: ${data.monthlyGoal.toLocaleString()}
+              </button>
+            )}
           </div>
-          <p className="text-[32px] font-semibold tracking-tight mb-4">${monthlyRevenue.toLocaleString()}</p>
-          <div className="w-full h-3 bg-surface-2 rounded-full overflow-hidden mb-2">
-            <div className={`h-full rounded-full transition-all duration-700 ${progressPct >= 100 ? 'bg-success' : 'bg-accent'}`} style={{ width: `${progressPct}%` }} />
+          <p className="text-3xl font-bold tracking-tight mb-4">${monthlyRevenue.toLocaleString()}</p>
+          <div className="w-full h-2.5 bg-surface-2 rounded-full overflow-hidden mb-2">
+            <div className={`h-full rounded-full transition-all duration-700 ${progressPct >= 100 ? 'bg-emerald-500' : 'bg-accent'}`} style={{ width: `${progressPct}%` }} />
           </div>
           <div className="flex justify-between text-xs text-text-tertiary">
             <span>{Math.round(progressPct)}% of monthly goal</span>
@@ -78,23 +85,23 @@ export default function MoneyTab({ data, setData }) {
           </div>
         </div>
 
-        <div className="card p-6 flex flex-col justify-center">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="card p-5 flex flex-col justify-center">
+          <div className="grid grid-cols-2 gap-y-4 gap-x-6">
             <div>
-              <p className="text-xs text-text-tertiary mb-1">Overdue</p>
-              <p className={`text-xl font-semibold ${overdueInvoices.length > 0 ? 'text-danger' : 'text-text-primary'}`}>{overdueInvoices.length}</p>
+              <p className="text-xs text-text-tertiary mb-0.5">Overdue</p>
+              <p className={`text-xl font-bold ${overdueInvoices.length > 0 ? 'text-danger' : 'text-text-primary'}`}>{overdueInvoices.length}</p>
             </div>
             <div>
-              <p className="text-xs text-text-tertiary mb-1">Pending</p>
-              <p className="text-xl font-semibold">{sentInvoices.length + outstandingInvoices.length}</p>
+              <p className="text-xs text-text-tertiary mb-0.5">Pending</p>
+              <p className="text-xl font-bold">{sentInvoices.length + outstandingInvoices.length}</p>
             </div>
             <div>
-              <p className="text-xs text-text-tertiary mb-1">Payments</p>
-              <p className="text-xl font-semibold">{(data.payments || []).filter(p => p.date.startsWith(currentMonthKey)).length}</p>
+              <p className="text-xs text-text-tertiary mb-0.5">Payments</p>
+              <p className="text-xl font-bold">{(data.payments || []).filter(p => p.date.startsWith(currentMonthKey)).length}</p>
             </div>
             <div>
-              <p className="text-xs text-text-tertiary mb-1">Avg. Deal</p>
-              <p className="text-xl font-semibold">${(data.payments || []).length > 0 ? Math.round((data.payments || []).reduce((s, p) => s + p.amount, 0) / (data.payments || []).length).toLocaleString() : '0'}</p>
+              <p className="text-xs text-text-tertiary mb-0.5">Avg. Deal</p>
+              <p className="text-xl font-bold">${(data.payments || []).length > 0 ? Math.round((data.payments || []).reduce((s, p) => s + p.amount, 0) / (data.payments || []).length).toLocaleString() : '0'}</p>
             </div>
           </div>
         </div>
@@ -103,81 +110,144 @@ export default function MoneyTab({ data, setData }) {
       {/* Forms */}
       {showLogPayment && (
         <div className="card p-5 mb-5">
-          <h3 className="text-[15px] font-semibold mb-3">Log Payment</h3>
+          <h3 className="text-sm font-semibold mb-3">Log Payment</h3>
           <div className="flex flex-wrap gap-3 items-end">
-            <div className="flex-1 min-w-[160px]"><label className="text-xs text-text-secondary font-medium block mb-1.5">Client</label><input autoFocus value={newPayment.client} onChange={(e) => setNewPayment(n => ({ ...n, client: e.target.value }))} placeholder="Client name" className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" /></div>
-            <div className="w-32"><label className="text-xs text-text-secondary font-medium block mb-1.5">Amount</label><input type="number" value={newPayment.amount} onChange={(e) => setNewPayment(n => ({ ...n, amount: e.target.value }))} placeholder="$0" className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" /></div>
-            <div><label className="text-xs text-text-secondary font-medium block mb-1.5">Date</label><input type="date" value={newPayment.date} onChange={(e) => setNewPayment(n => ({ ...n, date: e.target.value }))} className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm" /></div>
-            <div className="flex gap-2"><button onClick={() => setShowLogPayment(false)} className="px-4 py-2 text-sm text-text-secondary border border-border rounded-lg hover:bg-surface-2">Cancel</button><button onClick={logPayment} className="px-4 py-2 bg-success text-white text-sm font-medium rounded-lg shadow-sm">Log Payment</button></div>
+            <div className="flex-1 min-w-[160px]">
+              <label className="text-xs text-text-secondary font-medium block mb-1.5">Client</label>
+              <input autoFocus value={newPayment.client} onChange={(e) => setNewPayment(n => ({ ...n, client: e.target.value }))} placeholder="Client name" className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" />
+            </div>
+            <div className="w-28">
+              <label className="text-xs text-text-secondary font-medium block mb-1.5">Amount</label>
+              <input type="number" value={newPayment.amount} onChange={(e) => setNewPayment(n => ({ ...n, amount: e.target.value }))} placeholder="$0" className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" />
+            </div>
+            <div>
+              <label className="text-xs text-text-secondary font-medium block mb-1.5">Date</label>
+              <input type="date" value={newPayment.date} onChange={(e) => setNewPayment(n => ({ ...n, date: e.target.value }))} className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm" />
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setShowLogPayment(false)} className="px-3 py-2 text-sm text-text-secondary border border-border rounded-lg hover:bg-surface-2">Cancel</button>
+              <button onClick={logPayment} className="px-3 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg">Log</button>
+            </div>
           </div>
         </div>
       )}
       {showAddInvoice && (
         <div className="card p-5 mb-5">
-          <h3 className="text-[15px] font-semibold mb-3">New Invoice</h3>
+          <h3 className="text-sm font-semibold mb-3">New Invoice</h3>
           <div className="flex flex-wrap gap-3 items-end">
-            <div className="flex-1 min-w-[160px]"><label className="text-xs text-text-secondary font-medium block mb-1.5">Client</label><input autoFocus value={newInvoice.client} onChange={(e) => setNewInvoice(n => ({ ...n, client: e.target.value }))} placeholder="Client name" className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" /></div>
-            <div className="w-32"><label className="text-xs text-text-secondary font-medium block mb-1.5">Amount</label><input type="number" value={newInvoice.amount} onChange={(e) => setNewInvoice(n => ({ ...n, amount: e.target.value }))} placeholder="$0" className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" /></div>
-            <div><label className="text-xs text-text-secondary font-medium block mb-1.5">Due date</label><input type="date" value={newInvoice.dueDate} onChange={(e) => setNewInvoice(n => ({ ...n, dueDate: e.target.value }))} className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm" /></div>
-            <div className="flex gap-2"><button onClick={() => setShowAddInvoice(false)} className="px-4 py-2 text-sm text-text-secondary border border-border rounded-lg hover:bg-surface-2">Cancel</button><button onClick={addInvoice} className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg shadow-sm">Send Invoice</button></div>
+            <div className="flex-1 min-w-[160px]">
+              <label className="text-xs text-text-secondary font-medium block mb-1.5">Client</label>
+              <input autoFocus value={newInvoice.client} onChange={(e) => setNewInvoice(n => ({ ...n, client: e.target.value }))} placeholder="Client name" className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" />
+            </div>
+            <div className="w-28">
+              <label className="text-xs text-text-secondary font-medium block mb-1.5">Amount</label>
+              <input type="number" value={newInvoice.amount} onChange={(e) => setNewInvoice(n => ({ ...n, amount: e.target.value }))} placeholder="$0" className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" />
+            </div>
+            <div>
+              <label className="text-xs text-text-secondary font-medium block mb-1.5">Due date</label>
+              <input type="date" value={newInvoice.dueDate} onChange={(e) => setNewInvoice(n => ({ ...n, dueDate: e.target.value }))} className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm" />
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setShowAddInvoice(false)} className="px-3 py-2 text-sm text-text-secondary border border-border rounded-lg hover:bg-surface-2">Cancel</button>
+              <button onClick={addInvoice} className="px-3 py-2 bg-accent text-white text-sm font-medium rounded-lg">Send</button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Invoices */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+      {/* Invoice Tables */}
+      <div className="space-y-6 mb-8">
         {overdueInvoices.length > 0 && (
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-2 mb-3"><div className="w-2 h-2 rounded-full bg-danger animate-pulse" /><h3 className="text-[15px] font-semibold text-danger">Overdue ({overdueInvoices.length})</h3></div>
-            <div className="card overflow-hidden"><table className="w-full"><thead><tr className="bg-danger-soft border-b border-danger/10"><th className="text-left py-2.5 px-4 text-xs font-semibold text-danger uppercase tracking-wider">Client</th><th className="text-left py-2.5 px-4 text-xs font-semibold text-danger uppercase tracking-wider">Due Date</th><th className="text-right py-2.5 px-4 text-xs font-semibold text-danger uppercase tracking-wider">Amount</th><th className="w-24"></th></tr></thead><tbody>
-              {overdueInvoices.map(inv => <InvRow key={inv.id} inv={inv} overdue onPaid={() => markPaid(inv.id)} onDelete={() => deleteInvoice(inv.id)} />)}
-            </tbody></table></div>
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-danger animate-pulse" />
+              <h3 className="text-sm font-semibold text-danger">Overdue ({overdueInvoices.length})</h3>
+            </div>
+            <div className="card overflow-hidden">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-red-50/50 border-b border-red-100">
+                    <th className="text-left py-2.5 px-4 text-xs font-semibold text-danger uppercase tracking-wider">Client</th>
+                    <th className="text-left py-2.5 px-4 text-xs font-semibold text-danger uppercase tracking-wider">Due Date</th>
+                    <th className="text-right py-2.5 px-4 text-xs font-semibold text-danger uppercase tracking-wider">Amount</th>
+                    <th className="w-32"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {overdueInvoices.map(inv => <InvRow key={inv.id} inv={inv} overdue onPaid={() => markPaid(inv.id)} onDelete={() => deleteInvoice(inv.id)} />)}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
         {sentInvoices.length > 0 && (
           <div>
-            <h3 className="text-xs text-text-tertiary font-semibold uppercase tracking-wider mb-3">Sent</h3>
-            <div className="card overflow-hidden"><table className="w-full"><tbody>{sentInvoices.map(inv => <InvRow key={inv.id} inv={inv} onPaid={() => markPaid(inv.id)} onDelete={() => deleteInvoice(inv.id)} />)}</tbody></table></div>
+            <h3 className="text-xs text-text-tertiary font-semibold uppercase tracking-wider mb-3">Sent ({sentInvoices.length})</h3>
+            <div className="card overflow-hidden">
+              <table className="w-full"><tbody>
+                {sentInvoices.map(inv => <InvRow key={inv.id} inv={inv} onPaid={() => markPaid(inv.id)} onDelete={() => deleteInvoice(inv.id)} />)}
+              </tbody></table>
+            </div>
           </div>
         )}
 
         {outstandingInvoices.length > 0 && (
           <div>
-            <h3 className="text-xs text-text-tertiary font-semibold uppercase tracking-wider mb-3">Outstanding</h3>
-            <div className="card overflow-hidden"><table className="w-full"><tbody>{outstandingInvoices.map(inv => <InvRow key={inv.id} inv={inv} onPaid={() => markPaid(inv.id)} onDelete={() => deleteInvoice(inv.id)} />)}</tbody></table></div>
+            <h3 className="text-xs text-text-tertiary font-semibold uppercase tracking-wider mb-3">Outstanding ({outstandingInvoices.length})</h3>
+            <div className="card overflow-hidden">
+              <table className="w-full"><tbody>
+                {outstandingInvoices.map(inv => <InvRow key={inv.id} inv={inv} onPaid={() => markPaid(inv.id)} onDelete={() => deleteInvoice(inv.id)} />)}
+              </tbody></table>
+            </div>
           </div>
         )}
       </div>
 
-      {/* Recent payments */}
+      {/* Recent Payments */}
       {(data.payments || []).length > 0 && (
-        <div className="mb-10">
+        <div className="mb-8">
           <h3 className="text-xs text-text-tertiary font-semibold uppercase tracking-wider mb-3">Recent Payments</h3>
-          <div className="card overflow-hidden"><table className="w-full"><thead><tr className="bg-surface-2/50 border-b border-border"><th className="text-left py-2.5 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Client</th><th className="text-left py-2.5 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Date</th><th className="text-right py-2.5 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Amount</th></tr></thead><tbody>
-            {[...(data.payments || [])].reverse().slice(0, 10).map(p => (
-              <tr key={p.id} className="border-b border-border last:border-0 hover:bg-surface-2/30 transition-colors">
-                <td className="py-3 px-4 text-sm font-medium">{p.client}</td>
-                <td className="py-3 px-4 text-sm text-text-secondary">{p.date}</td>
-                <td className="py-3 px-4 text-sm font-semibold text-success text-right">+${p.amount.toLocaleString()}</td>
-              </tr>
-            ))}
-          </tbody></table></div>
+          <div className="card overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-surface-2/50 border-b border-border">
+                  <th className="text-left py-2.5 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Client</th>
+                  <th className="text-left py-2.5 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Date</th>
+                  <th className="text-right py-2.5 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...(data.payments || [])].reverse().slice(0, 10).map(p => (
+                  <tr key={p.id} className="border-b border-border last:border-0 hover:bg-surface-2/30 transition-colors">
+                    <td className="py-3 px-4 text-sm font-medium">{p.client}</td>
+                    <td className="py-3 px-4 text-sm text-text-secondary">{p.date}</td>
+                    <td className="py-3 px-4 text-sm font-semibold text-emerald-600 text-right">+${p.amount.toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
+      {/* Monthly History */}
       {sortedMonths.length > 0 && (
         <div>
           <h3 className="text-xs text-text-tertiary font-semibold uppercase tracking-wider mb-3">Monthly History</h3>
-          <div className="card p-5"><div className="space-y-3 max-w-xl">
-            {sortedMonths.map(([month, total]) => (
-              <div key={month} className="flex items-center gap-4">
-                <span className="text-xs text-text-tertiary w-16 flex-shrink-0">{new Date(month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
-                <div className="flex-1 h-2.5 bg-surface-2 rounded-full overflow-hidden"><div className="h-full bg-accent/40 rounded-full" style={{ width: `${(total / maxM) * 100}%` }} /></div>
-                <span className="text-xs font-semibold w-20 text-right">${total.toLocaleString()}</span>
-              </div>
-            ))}
-          </div></div>
+          <div className="card p-5">
+            <div className="space-y-3 max-w-xl">
+              {sortedMonths.map(([month, total]) => (
+                <div key={month} className="flex items-center gap-4">
+                  <span className="text-xs text-text-tertiary w-16 flex-shrink-0">{new Date(month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                  <div className="flex-1 h-2 bg-surface-2 rounded-full overflow-hidden">
+                    <div className="h-full bg-accent/40 rounded-full" style={{ width: `${(total / maxM) * 100}%` }} />
+                  </div>
+                  <span className="text-xs font-semibold w-20 text-right">${total.toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -186,14 +256,14 @@ export default function MoneyTab({ data, setData }) {
 
 function InvRow({ inv, overdue, onPaid, onDelete }) {
   return (
-    <tr className={`group border-b border-border last:border-0 hover:bg-surface-2/30 transition-colors ${overdue ? 'bg-danger-soft/50' : ''}`}>
-      <td className={`py-3 px-4 text-sm font-medium ${overdue ? 'text-danger' : ''}`}>{inv.client}</td>
+    <tr className={`group border-b border-border last:border-0 hover:bg-surface-2/30 transition-colors ${overdue ? 'bg-red-50/30' : ''}`}>
+      <td className={`py-3 px-4 text-sm font-medium ${overdue ? 'text-danger' : 'text-text-primary'}`}>{inv.client}</td>
       <td className="py-3 px-4 text-sm text-text-secondary">{inv.dueDate}</td>
-      <td className={`py-3 px-4 text-sm font-semibold text-right ${overdue ? 'text-danger' : ''}`}>${inv.amount.toLocaleString()}</td>
+      <td className={`py-3 px-4 text-sm font-semibold text-right ${overdue ? 'text-danger' : 'text-text-primary'}`}>${inv.amount.toLocaleString()}</td>
       <td className="py-3 px-4 text-right">
         <div className="flex items-center justify-end gap-2">
-          <button onClick={onPaid} className="text-xs text-success font-semibold px-2.5 py-1 rounded-md hover:bg-success-soft transition-colors border border-success/20">Mark Paid</button>
-          <button onClick={onDelete} className="opacity-0 group-hover:opacity-100 text-text-tertiary hover:text-danger p-1 rounded-md hover:bg-danger-soft transition-all">
+          <button onClick={onPaid} className="text-xs text-emerald-600 font-medium px-2.5 py-1 rounded-lg hover:bg-emerald-50 transition-colors border border-emerald-200">Paid</button>
+          <button onClick={onDelete} className="opacity-0 group-hover:opacity-100 text-text-tertiary hover:text-danger p-1 rounded hover:bg-danger-soft transition-all">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>

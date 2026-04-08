@@ -19,10 +19,11 @@ export default function HabitsTab({ data, setData }) {
   const getStreak = (h) => { let s = 0; const d = new Date(); for (let i = 0; i < 365; i++) { const ds = d.toISOString().split('T')[0]; if (h.completions[ds] > 0) s++; else if (i > 0) break; d.setDate(d.getDate() - 1); } return s; };
 
   return (
-    <div className="p-6 md:p-10">
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-6">
-          <h1 className="text-[28px] font-semibold tracking-tight">Habits</h1>
+    <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <h1 className="text-2xl font-bold text-text-primary">Habits</h1>
           <div className="flex bg-surface border border-border rounded-lg p-0.5">
             {['business', 'personal'].map(tab => (
               <button key={tab} onClick={() => setSubTab(tab)}
@@ -32,17 +33,19 @@ export default function HabitsTab({ data, setData }) {
             ))}
           </div>
         </div>
-        <button onClick={() => setShowAdd(!showAdd)} className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors shadow-sm shadow-accent/20 flex items-center gap-1.5">
+        <button onClick={() => setShowAdd(!showAdd)} className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors flex items-center gap-1.5">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Add habit
+          Add Habit
         </button>
       </div>
 
+      {/* Add form */}
       {showAdd && (
         <div className="card p-5 mb-5">
+          <h3 className="text-sm font-semibold mb-3">New Habit</h3>
           <div className="flex flex-wrap gap-3 items-end">
             <div className="flex-1 min-w-[200px]">
-              <label className="text-xs text-text-secondary font-medium block mb-1.5">Habit name</label>
+              <label className="text-xs text-text-secondary font-medium block mb-1.5">Name</label>
               <input autoFocus value={newHabit.name} onChange={(e) => setNewHabit(n => ({ ...n, name: e.target.value }))}
                 onKeyDown={(e) => e.key === 'Enter' && addHabit()} placeholder="e.g. Cold outreach"
                 className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" />
@@ -54,19 +57,26 @@ export default function HabitsTab({ data, setData }) {
                   className="w-16 bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm" />
                 <span className="text-sm text-text-tertiary">per</span>
                 <select value={newHabit.targetPeriod} onChange={(e) => setNewHabit(n => ({ ...n, targetPeriod: e.target.value }))}
-                  className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm"><option value="day">day</option><option value="week">week</option></select>
+                  className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm">
+                  <option value="day">day</option><option value="week">week</option>
+                </select>
               </div>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => setShowAdd(false)} className="px-4 py-2 text-sm text-text-secondary border border-border rounded-lg hover:bg-surface-2 transition-colors">Cancel</button>
-              <button onClick={addHabit} className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg shadow-sm">Add</button>
+              <button onClick={() => setShowAdd(false)} className="px-3 py-2 text-sm text-text-secondary border border-border rounded-lg hover:bg-surface-2">Cancel</button>
+              <button onClick={addHabit} className="px-3 py-2 bg-accent text-white text-sm font-medium rounded-lg">Add</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Habits grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      {/* Habits Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {habits.length === 0 && (
+          <div className="col-span-full card p-12 text-center text-sm text-text-tertiary">
+            No {subTab} habits yet. Add one to get started.
+          </div>
+        )}
         {habits.map(h => {
           const todayCount = h.completions[today] || 0;
           const target = h.targetPeriod === 'day' ? h.targetCount : Math.ceil(h.targetCount / 7);
@@ -75,30 +85,34 @@ export default function HabitsTab({ data, setData }) {
           const pct = Math.min(todayCount / Math.max(target, 1), 1);
 
           return (
-            <div key={h.id} className="card p-6 group">
-              <div className="flex items-start justify-between mb-4">
+            <div key={h.id} className="card p-5 group">
+              {/* Header row */}
+              <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h3 className="text-[15px] font-semibold">{h.name}</h3>
-                  <p className="text-xs text-text-tertiary mt-0.5">{h.targetCount} per {h.targetPeriod} {streak > 0 && <span className="text-accent ml-1">{streak}d streak</span>}</p>
+                  <h3 className="text-sm font-semibold text-text-primary">{h.name}</h3>
+                  <p className="text-xs text-text-tertiary mt-0.5">
+                    {h.targetCount}/{h.targetPeriod}
+                    {streak > 0 && <span className="text-accent ml-2">{streak}d streak</span>}
+                  </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button onClick={() => logCompletion(h.id)}
-                    className={`px-3.5 py-1.5 text-sm font-semibold rounded-lg transition-colors ${done ? 'bg-emerald-50 text-emerald-600' : 'bg-accent text-white hover:bg-accent/90 shadow-sm shadow-accent/20'}`}>
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${done ? 'bg-emerald-50 text-emerald-600' : 'bg-accent text-white hover:bg-accent/90'}`}>
                     {done ? '✓ Done' : '+1'}
                   </button>
                   <button onClick={() => deleteHabit(h.id)}
-                    className="opacity-0 group-hover:opacity-100 text-text-tertiary hover:text-danger p-1 transition-all rounded-md hover:bg-danger-soft">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    className="opacity-0 group-hover:opacity-100 text-text-tertiary hover:text-danger p-1 transition-all rounded hover:bg-danger-soft">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   </button>
                 </div>
               </div>
 
-              {/* Progress */}
+              {/* Progress bar */}
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex-1 h-2 bg-surface-2 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full transition-all duration-500 ${done ? 'bg-success' : 'bg-accent'}`} style={{ width: `${pct * 100}%` }} />
+                  <div className={`h-full rounded-full transition-all duration-500 ${done ? 'bg-emerald-500' : 'bg-accent'}`} style={{ width: `${pct * 100}%` }} />
                 </div>
-                <span className="text-xs text-text-secondary font-semibold w-10 text-right">{todayCount}/{target}</span>
+                <span className="text-xs text-text-secondary font-medium w-10 text-right">{todayCount}/{target}</span>
               </div>
 
               {/* Heatmap */}
@@ -133,7 +147,7 @@ function Heatmap({ habit }) {
           {week.map(cell => (
             <div key={cell.date}
               className={`w-[7px] h-[7px] rounded-[2px] ${cell.isToday ? 'ring-1 ring-accent ring-offset-1 ring-offset-surface' : ''} ${cell.isFuture ? 'opacity-10' : ''}`}
-              style={{ backgroundColor: cell.count > 0 ? `rgba(79, 110, 247, ${Math.min(0.2 + cell.count * 0.25, 1)})` : '#E8E8EC' }}
+              style={{ backgroundColor: cell.count > 0 ? `rgba(79, 110, 247, ${Math.min(0.2 + cell.count * 0.25, 1)})` : '#E4E7EB' }}
               title={`${cell.date}: ${cell.count}`}
             />
           ))}

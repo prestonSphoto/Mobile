@@ -31,13 +31,13 @@ export default function TasksTab({ data, setData }) {
 
   const prLabel = { high: 'High', medium: 'Med', low: 'Low' };
   const prColor = { high: 'text-red-600 bg-red-50', medium: 'text-amber-600 bg-amber-50', low: 'text-blue-600 bg-blue-50' };
-  const prDot = { high: 'bg-red-500', medium: 'bg-amber-500', low: 'bg-blue-500' };
 
   return (
-    <div className="p-6 md:p-10">
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-6">
-          <h1 className="text-[28px] font-semibold tracking-tight">Tasks</h1>
+    <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-8">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <h1 className="text-2xl font-bold text-text-primary">Tasks</h1>
           <div className="flex bg-surface border border-border rounded-lg p-0.5">
             {[['today', `Today (${todayTasks.length})`], ['backlog', `Backlog (${backlog.length})`]].map(([id, label]) => (
               <button key={id} onClick={() => setSubTab(id)}
@@ -47,23 +47,25 @@ export default function TasksTab({ data, setData }) {
             ))}
           </div>
         </div>
-        <button onClick={() => setShowAdd(!showAdd)} className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors shadow-sm shadow-accent/20 flex items-center gap-1.5">
+        <button onClick={() => setShowAdd(!showAdd)} className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg hover:bg-accent/90 transition-colors flex items-center gap-1.5">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Add task
+          Add Task
         </button>
       </div>
 
+      {/* Add form */}
       {showAdd && (
         <div className="card p-5 mb-5">
-          <div className="flex flex-wrap gap-3 items-end">
-            <div className="flex-1 min-w-[200px]">
-              <label className="text-xs text-text-secondary font-medium block mb-1.5">Task title</label>
+          <h3 className="text-sm font-semibold mb-3">New Task</h3>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_auto_auto_auto] gap-3 items-end">
+            <div>
+              <label className="text-xs text-text-secondary font-medium block mb-1.5">Title</label>
               <input autoFocus value={newTask.title} onChange={(e) => setNewTask(n => ({ ...n, title: e.target.value }))}
                 onKeyDown={(e) => e.key === 'Enter' && addTask()} placeholder="What needs to be done?"
                 className="w-full bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" />
             </div>
             <div>
-              <label className="text-xs text-text-secondary font-medium block mb-1.5">Due date</label>
+              <label className="text-xs text-text-secondary font-medium block mb-1.5">Due</label>
               <input type="date" value={newTask.dueDate} onChange={(e) => setNewTask(n => ({ ...n, dueDate: e.target.value }))}
                 className="bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm" />
             </div>
@@ -77,44 +79,52 @@ export default function TasksTab({ data, setData }) {
             <div>
               <label className="text-xs text-text-secondary font-medium block mb-1.5">Client</label>
               <input value={newTask.client} onChange={(e) => setNewTask(n => ({ ...n, client: e.target.value }))} placeholder="Optional"
-                className="w-32 bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" />
+                className="w-28 bg-surface-2 border border-border rounded-lg px-3 py-2 text-sm placeholder-text-tertiary" />
             </div>
             <div className="flex gap-2">
-              <button onClick={() => setShowAdd(false)} className="px-4 py-2 text-sm text-text-secondary hover:text-text-primary border border-border rounded-lg hover:bg-surface-2 transition-colors">Cancel</button>
-              <button onClick={addTask} className="px-4 py-2 bg-accent text-white text-sm font-medium rounded-lg shadow-sm">Add task</button>
+              <button onClick={() => setShowAdd(false)} className="px-3 py-2 text-sm text-text-secondary border border-border rounded-lg hover:bg-surface-2">Cancel</button>
+              <button onClick={addTask} className="px-3 py-2 bg-accent text-white text-sm font-medium rounded-lg">Add</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Table */}
+      {/* Task Table */}
       <div className="card overflow-hidden">
         <table className="w-full">
           <thead>
-            <tr className="bg-surface-2/50 border-b border-border">
-              <th className="text-left py-3 px-5 w-10"></th>
+            <tr className="bg-surface-2/60 border-b border-border">
+              <th className="w-12 py-3 px-4"></th>
               <th className="text-left py-3 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Task</th>
               <th className="text-left py-3 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider w-28">Due Date</th>
               <th className="text-left py-3 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider w-24">Priority</th>
-              <th className="text-left py-3 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider w-28">Client</th>
+              <th className="text-left py-3 px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider w-32">Client</th>
               <th className="w-12"></th>
             </tr>
           </thead>
           <tbody>
-            {visible.length === 0 && <tr><td colSpan={6} className="py-12 text-center text-sm text-text-tertiary">{subTab === 'today' ? 'Nothing due today. Nice work!' : 'No backlog tasks.'}</td></tr>}
+            {visible.length === 0 && (
+              <tr><td colSpan={6} className="py-16 text-center text-sm text-text-tertiary">
+                {subTab === 'today' ? 'Nothing due today. Nice work!' : 'No backlog tasks.'}
+              </td></tr>
+            )}
             {visible.map(task => (
               <tr key={task.id} className="group border-b border-border last:border-0 hover:bg-surface-2/30 transition-colors"
-                style={{ transform: swipeState.id === task.id ? `translateX(${swipeState.offset}px)` : '', opacity: swipeState.id === task.id && Math.abs(swipeState.offset) > 80 ? 0.4 : 1 }}
+                style={swipeState.id === task.id ? { transform: `translateX(${swipeState.offset}px)`, opacity: Math.abs(swipeState.offset) > 80 ? 0.4 : 1 } : {}}
                 onTouchStart={(e) => handleTouchStart(task.id, e)} onTouchMove={(e) => handleTouchMove(task.id, e)} onTouchEnd={() => handleTouchEnd(task.id)}>
-                <td className="py-3 px-5">
-                  <button onClick={() => complete(task.id)} className="w-[18px] h-[18px] rounded-md border-2 border-gray-300 hover:border-accent hover:bg-accent-soft transition-colors" />
+                <td className="py-3 px-4 text-center">
+                  <button onClick={() => complete(task.id)} className="w-[18px] h-[18px] rounded border-2 border-gray-300 hover:border-accent hover:bg-accent-soft transition-colors inline-block" />
                 </td>
                 <td className="py-3 px-4 text-sm font-medium text-text-primary">{task.title}</td>
-                <td className="py-3 px-4 text-sm text-text-secondary">{task.dueDate === today ? <span className="text-accent font-medium">Today</span> : task.dueDate}</td>
-                <td className="py-3 px-4"><span className={`text-[11px] font-semibold px-2 py-1 rounded-md ${prColor[task.priority]}`}>{prLabel[task.priority]}</span></td>
-                <td className="py-3 px-4 text-sm text-text-secondary">{task.client || <span className="text-text-tertiary">—</span>}</td>
+                <td className="py-3 px-4 text-sm text-text-secondary">
+                  {task.dueDate === today ? <span className="text-accent font-medium">Today</span> : task.dueDate}
+                </td>
                 <td className="py-3 px-4">
-                  <button onClick={() => del(task.id)} className="opacity-0 group-hover:opacity-100 text-text-tertiary hover:text-danger p-1 transition-all rounded-md hover:bg-danger-soft">
+                  <span className={`text-[11px] font-semibold px-2 py-0.5 rounded ${prColor[task.priority]}`}>{prLabel[task.priority]}</span>
+                </td>
+                <td className="py-3 px-4 text-sm text-text-secondary">{task.client || <span className="text-text-tertiary">—</span>}</td>
+                <td className="py-3 px-4 text-center">
+                  <button onClick={() => del(task.id)} className="opacity-0 group-hover:opacity-100 text-text-tertiary hover:text-danger p-1 transition-all rounded hover:bg-danger-soft">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   </button>
                 </td>
@@ -124,6 +134,7 @@ export default function TasksTab({ data, setData }) {
         </table>
       </div>
 
+      {/* Completed */}
       {completed.length > 0 && (
         <div className="mt-6">
           <button onClick={() => setShowDone(!showDone)} className="flex items-center gap-2 text-xs text-text-tertiary font-semibold uppercase tracking-wider mb-3 hover:text-text-secondary transition-colors">
@@ -135,15 +146,15 @@ export default function TasksTab({ data, setData }) {
             <div className="card overflow-hidden">
               <table className="w-full"><tbody>
                 {completed.map(task => (
-                  <tr key={task.id} className="border-b border-border last:border-0 opacity-50">
-                    <td className="py-2.5 px-5 w-10">
-                      <div className="w-[18px] h-[18px] rounded-md bg-success/20 border-2 border-success/40 flex items-center justify-center">
+                  <tr key={task.id} className="border-b border-border last:border-0 text-text-tertiary">
+                    <td className="py-3 px-4 w-12 text-center">
+                      <div className="w-[18px] h-[18px] rounded bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center inline-flex">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
                       </div>
                     </td>
-                    <td className="py-2.5 px-4 text-sm line-through text-text-tertiary">{task.title}</td>
-                    <td className="py-2.5 px-4 text-xs text-text-tertiary">{task.dueDate}</td>
-                    <td className="py-2.5 px-4 text-xs text-text-tertiary">{task.client}</td>
+                    <td className="py-3 px-4 text-sm line-through">{task.title}</td>
+                    <td className="py-3 px-4 text-xs w-28">{task.dueDate}</td>
+                    <td className="py-3 px-4 text-xs w-32">{task.client}</td>
                   </tr>
                 ))}
               </tbody></table>
